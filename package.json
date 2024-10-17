@@ -1,6 +1,7 @@
 {
   "devDependencies": {
     "@eslint/js": "^9.12.0",
+    "@types/uuid": "^10.0.0",
     "@webpack-cli/generators": "^3.0.7",
     "eslint": "^8.57.1",
     "globals": "^15.11.0",
@@ -22,7 +23,8 @@
     "build:prod": "webpack --mode=production --node-env=production",
     "watch": "webpack --watch",
     "build": "webpack",
-    "ss": "nodemon --exec node dist/index.js", 
+    "ss": "nodemon --exec node dist/index.js",
+    "s": "nodemon --exec node src/index.js",
     "lint": "npx eslint --fix src",
     "prettier": "npx prettier --write .",
     "start:dev2": "ts-node-dev src",
@@ -35,6 +37,7 @@
   "dependencies": {
     "jest": "^29.7.0",
     "nodemon": "^3.1.7",
-    "ts-node-dev": "^2.0.0"
+    "ts-node-dev": "^2.0.0",
+    "uuid": "^10.0.0"
   }
 }
