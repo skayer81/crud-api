@@ -1,28 +1,40 @@
-import {DBHendler} from './../DBHendlers/dbHendler.js'
+import {DBHendler} from '../DBHendlers/dbHendler'
+import http from 'http';
 
-export class DeleteHendler{
+export class GETHendler{
+
+    dBHendler =  new DBHendler()
   //  users = [];
     constructor(){
        // this.PORT = process.env.PORT || 3000;
-        this.dBHendler =  new DBHendler()
+     //   this.
     }
 
-    async getUserData(req, res){
+    async getUserData(req: http.IncomingMessage, res: http.ServerResponse, data:string){
+        console.log('get..........')
         const urlParts = req.url?.split('/');
         const userId = urlParts?.[2];
-        if (urlParts?.[1] === 'users' && userId) {
-            const userIndex = this.dBHendler.findUserByID(userId) //users.findIndex(u => u.id === userId);
-            if (userIndex === -1) {
-                res.writeHead(404, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({ message: 'User not found' }));
+        console.log(urlParts, req.url)
+        if (urlParts?.[1] === 'users') {
+            console.log(userId)
+            if (userId) {
+                // GET api/users/{userId}
+                const user = this.dBHendler.getUserByID(userId)// users.find(u => u.id === userId);
+                if (!user) {
+                    res.writeHead(404, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ message: 'User not found' }));
+                } else {
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify(user));
+                }
             } else {
-                this.dBHendler.delUserByID(userId)
-                res.writeHead(204);
-                res.end();
+                // GET api/users
+            
+                const users = this.dBHendler.getAllUsers();
+                console.log('все юзеры', users)
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify(users));
             }
-        } else {
-            res.writeHead(400, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ message: 'Invalid userId format' }));
         }
         // let data = ''
         // req.on("data", (chank) => {

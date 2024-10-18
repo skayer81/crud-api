@@ -1,13 +1,17 @@
-import {DBHendler} from './../DBHendlers/dbHendler.js'
+import {DBHendler} from '../DBHendlers/dbHendler'
+import http from 'http';
 
 export class PUTHendler{
   //  users = [];
+    dBHendler =  new DBHendler()
+    
+
     constructor(){
        // this.PORT = process.env.PORT || 3000;
-        this.dBHendler =  new DBHendler()
+     //   this.dBHendler =  new DBHendler()
     }
 
-    async getUserData(req, res, body){
+    async getUserData(req: http.IncomingMessage, res: http.ServerResponse, data:string){
         const urlParts = req.url?.split('/');
         const userId = urlParts?.[2];
         if (urlParts?.[1] === 'users' && userId) {

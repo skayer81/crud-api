@@ -1,13 +1,16 @@
-import {DBHendler} from './../DBHendlers/dbHendler.js'
+import {DBHendler} from '../DBHendlers/dbHendler'
+
+import http from 'http';
 
 export class POSTHendler{
   //  users = [];
+  dBHendler =  new DBHendler()//.getInstance
     constructor(){
-        this.PORT = process.env.PORT || 3000;
-        this.dBHendler =  new DBHendler()
+      //  this.PORT = process.env.PORT || 3000;
+      //  this.
     }
 
-    async getUserData(req, res, data){
+    async getUserData(req: http.IncomingMessage, res: http.ServerResponse, data:string){
         // let data = ''
         // req.on("data", (chank) => {
         //     data += chank.toString()

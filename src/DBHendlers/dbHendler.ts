@@ -1,29 +1,64 @@
 import { v4 as uuidv4 } from 'uuid';
 
+type User = {
+  id?: string,
+  username: string,
+  age: number,
+  hobbies: Array<string>
+}
+
+// type InnerUser = {
+//   name: string,
+//   age: number,
+//   hobbies: Array<string>
+// }
+
 export class DBHendler{
-      users = [];
+      // users = [];
+
+      // _instance : DBHendler|null = null;
+      private static instance: DBHendler | null = null;
+      private users: Array<User> = []
 
       constructor() {
-        if (DBHendler._instance) {
-          return DBHendler._instance;
+        if (DBHendler.instance) {
+          return DBHendler.instance;
         }
-        DBHendler._instance = this;
+        DBHendler.instance = this;
     
-        this.users = [];
+        //this.users = [];
         console.log('---------------------------------------')
       }
+   //   private static 
+   //   _instance: DBHendler | null = null;
+    ; // Замените `any` на более конкретный тип, если возможно.
+    
+      // constructor() {
+      //   // Инициализация console.log('---------------------------------------');
+      //   if (DBHendler._instance === null) {
+      //     DBHendler._instance = new DBHendler();
+      //   }
+      //   return DBHendler._instance;
+      // }
+    
+      // public static getInstance(): DBHendler {
+      //   if (DBHendler._instance === null) {
+      //     DBHendler._instance = new DBHendler();
+      //   }
+      //   return DBHendler._instance;
+      // }
 
-      addUser = (user) => {
+      addUser = (user: User) => {
         user.id = uuidv4(),
         this.users.push(user)
         return user
       }
 
-      getUserByID = (userId) => {
+      getUserByID = (userId: string)  => {
         return this.users.find(user => user.id === userId);
       }
 
-      findUserByID = (userId) => {
+      findUserByID = (userId : string) => {
 
       return this.users.findIndex(u => u.id === userId)
     }
@@ -32,7 +67,7 @@ export class DBHendler{
         return this.users
       }
 
-      chekValidUser = (userData) => {
+      chekValidUser = (userData: User) => {
         const { username, age, hobbies } = userData;
         //const 
         if (!username || typeof username !== 'string' || !age ||  isNaN(Number(age))   || !Array.isArray(hobbies)) {
@@ -42,7 +77,7 @@ export class DBHendler{
       }
 
       
-      chekValidUserUpdateData = (userData) => {
+      chekValidUserUpdateData = (userData : User) => {
         const { username, age, hobbies } = userData;
         //const 
         if ((username && typeof username !== 'string') || (age &&  isNaN(Number(age)))   || !Array.isArray(hobbies)) {
@@ -51,20 +86,20 @@ export class DBHendler{
         return true
       }
 
-      delUserByID = (userId) => {
+      delUserByID = (userId: string) => {
         const index = this.findUserByID(userId)
         if (index != -1) this.users.splice(index, 1);
       }
 
-      uppdateUser = (userIndex, userData) => {
+      uppdateUser = (userIndex: number, userData: User) => {
         const { username, age, hobbies } = userData;
         const updatedUser = {
-            ...users[userIndex],
-            username: username !== undefined ? username : users[userIndex].username,
-            age: age !== undefined ? age : users[userIndex].age,
-            hobbies: hobbies !== undefined ? hobbies : users[userIndex].hobbies,
+            ...this.users[userIndex],
+            username: username !== undefined ? username : this.users[userIndex].username,
+            age: age !== undefined ? age : this.users[userIndex].age,
+            hobbies: hobbies !== undefined ? hobbies : this.users[userIndex].hobbies,
         };
-        users[userIndex] = updatedUser;
+        this.users[userIndex] = updatedUser;
       }
 
 
