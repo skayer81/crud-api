@@ -47,7 +47,7 @@ function parseUserData(data: string, res: http.ServerResponse): User | null {
     
   } catch (error) {
     res.writeHead(400 , { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ message: `Error parsing JSON : ${data}`}));
+    res.end(JSON.stringify({ message: `Error parsing JSON : ${data}` }));
   //  console.error('Error parsing JSON:');
     return null;
   }
@@ -85,13 +85,13 @@ export class POSTHendler {
 
      catch (error) {
       res.writeHead(400 , { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ message: `Error parsing JSON : ${data}`}));
+      res.end(JSON.stringify({ message: `Error parsing JSON : ${data}` }));
       return
     }
     const parsedData: unknown = parseUserData(data, res);
     if (!isUser(parsedData)) {
       res.writeHead(400 , { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ message: `Invalid User data : ${data}`}));
+      res.end(JSON.stringify({ message: `Invalid User data : ${data}` }));
       return
     }
     const chekUserRes = requiredFieldnotEmpty(parsedData);

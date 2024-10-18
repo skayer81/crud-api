@@ -40,7 +40,7 @@ class Application {
             this.getHendler.getUserData(req, res);
             break;
           case "DELETE":
-            this.deleteHendler.getUserData(req, res, data);
+            this.deleteHendler.getUserData(req, res);
             break;
           case "PUT":
             this.putHendler.getUserData(req, res, data);
