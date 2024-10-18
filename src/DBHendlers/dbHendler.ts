@@ -62,20 +62,6 @@ export class DBHendler {
 
   public getAllUsers = () : User[] => this.users;
 
-  public chekValidUser = (userData: User) : boolean => {
-    const { username, age, hobbies } = userData;
-    // const
-    if (
-      !username ||
-      typeof username !== "string" ||
-      !age ||
-      Number.isNaN(age) ||
-      !Array.isArray(hobbies)
-    ) {
-      return false;
-    }
-    return true;
-  };
 
   public chekValidUserUpdateData = (userData: User) : boolean=> {
     const { username, age, hobbies } = userData;
