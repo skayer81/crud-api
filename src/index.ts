@@ -37,7 +37,7 @@ class Application {
             this.postHendler.getUserData(req, res, data);
             break;
           case "GET":
-            this.getHendler.getUserData(req, res, data);
+            this.getHendler.getUserData(req, res);
             break;
           case "DELETE":
             this.deleteHendler.getUserData(req, res, data);

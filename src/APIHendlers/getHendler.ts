@@ -1,13 +1,20 @@
 import http from "http";
+// import { v4 as uuidv4 } from "uuid";
 import { DBHendler } from "../DBHendlers/dbHendler";
+
+  function isUUIDv4(uuid: string): boolean {
+    const uuidv4Regex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    return uuidv4Regex.test(uuid);
+  }
 
 export class GETHendler {
   private dBHendler = new DBHendler();
+//  0ad60c15-60c0-4f55-8a7c-33374afbf11e
 
   public getUserData(
+
     req: http.IncomingMessage,
     res: http.ServerResponse,
-    data: string,
   ) : void{
     console.log("get..........");
     const urlParts = req.url?.split("/");
@@ -16,72 +23,31 @@ export class GETHendler {
     if (urlParts?.[1] === "users") {
       console.log(userId);
       if (userId) {
-        // GET api/users/{userId}
+        if ( !isUUIDv4(userId)){
+          res.writeHead(400, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ message: "userId is invalid (not uuid)" }));
+          return
+        }
+
         const user = this.dBHendler.getUserByID(userId); // users.find(u => u.id === userId);
         if (!user) {
           res.writeHead(404, { "Content-Type": "application/json" });
-          res.end(JSON.stringify({ message: "User not found" }));
-        } else {
+          res.end(JSON.stringify({ message: `User with id=${userId}  not found` }));
+          return
+        } 
           res.writeHead(200, { "Content-Type": "application/json" });
           res.end(JSON.stringify(user));
-        }
+        
       } else {
-        // GET api/users
-
         const users = this.dBHendler.getAllUsers();
-        console.log("все юзеры", users);
         res.writeHead(200, { "Content-Type": "application/json" });
         res.end(JSON.stringify(users));
       }
     }
-    // let data = ''
-    // req.on("data", (chank) => {
-    //     data += chank.toString()
-    //   //  console.log(data.toString());
-    //   //  users.push()
-    // });
-    // req.on("end", () => {
-    //     console.log(data)
-    //     const parseData = JSON.parse(data);  //const parseData
-    //   console.log('data', data)
-    //   console.log('parse', JSON.parse(data))
-    //   const chekUserRes = this.dBHendler.chekValidUser(parseData)
-
-    //   if (chekUserRes) {
-
+    else{
+      res.writeHead(404, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ message: "request to non-existing endpoint" }));
+    }
+ 
   }
 }
-
-//     runApp(){
-//         this.server = http.createServer((req, res) => {
-
-//         })
-//         server.listen(PORT, () => {
-//             console.log(`Server is running on http://localhost:${PORT}`);
-//         });
-//     }
-// }
-// const users = [];
-// const server = http.createServer((req, res) => {
-//     if (req.method = 'POST') {
-//         console.log('---------------')
-//         let data = ''
-//         req.on("data", (chank) => {
-//             data += chank.toString()
-//           //  console.log(data.toString());
-//           //  users.push()
-//         });
-//         req.on("end", () => {
-//             users.push(JSON.parse(data));
-//           //  res.writeHead(201, { 'Content-Type': 'application/json' });
-//         })
-//         res.writeHead(201, { 'Content-Type': 'application/json' });
-//         res.end('userADD');
-//         // res.end(JSON.stringify(newUser));
-//     }
-//     console.log(users)
-// });
-// const PORT = process.env.PORT || 3000;
-// server.listen(PORT, () => {
-//     console.log(`Server is running on http://localhost:${PORT}`);
-// });
