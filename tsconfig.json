@@ -1,22 +1,19 @@
 {
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "noImplicitAny": true,
-    "module": "ESNext",
-    "target": "ESNext",
-    "allowJs": true,
-    "moduleResolution": "node",
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "strict": true,
+    "baseUrl": "./",
     "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["ESNext"],
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "noImplicitAny": true,
+    "outDir": "./dist/",
+    "removeComments": true,
+    "resolveJsonModule": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "sourceMap": true,
+    "strict": true,
+    "target": "es5"
   },
-  "files": ["src/index.js"],
-  "include": ["src/<strong>/*"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "test", "dist", "**/*spec.ts"]
 }
-
-
-
