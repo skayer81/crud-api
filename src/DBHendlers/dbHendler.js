@@ -25,7 +25,7 @@ export class DBHendler{
 
       findUserByID = (userId) => {
 
-      return users.findIndex(u => u.id === userId)
+      return this.users.findIndex(u => u.id === userId)
     }
 
       getAllUsers = () => {
@@ -41,9 +41,30 @@ export class DBHendler{
         return true
       }
 
+      
+      chekValidUserUpdateData = (userData) => {
+        const { username, age, hobbies } = userData;
+        //const 
+        if ((username && typeof username !== 'string') || (age &&  isNaN(Number(age)))   || !Array.isArray(hobbies)) {
+            return false
+        } 
+        return true
+      }
+
       delUserByID = (userId) => {
         const index = this.findUserByID(userId)
         if (index != -1) this.users.splice(index, 1);
+      }
+
+      uppdateUser = (userIndex, userData) => {
+        const { username, age, hobbies } = userData;
+        const updatedUser = {
+            ...users[userIndex],
+            username: username !== undefined ? username : users[userIndex].username,
+            age: age !== undefined ? age : users[userIndex].age,
+            hobbies: hobbies !== undefined ? hobbies : users[userIndex].hobbies,
+        };
+        users[userIndex] = updatedUser;
       }
 
 

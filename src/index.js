@@ -1,6 +1,8 @@
 import http from 'http';
 import { POSTHendler } from './APIHendlers/postHendler.js';
 import { GETHendler } from './APIHendlers/getHendler.js';
+import { PUTHendler } from './APIHendlers/putHendler.js';
+import { DeleteHendler } from './APIHendlers/deleteHendler.js';
 //import POSTHendler from './postHendler/postHendler'
 
 class Application{
@@ -9,6 +11,8 @@ class Application{
         this.PORT = process.env.PORT || 3000;
         this.postHendler = new POSTHendler()
         this.getHendler = new GETHendler()
+        this.deleteHendler = new DeleteHendler()
+        this.putHendler = new PUTHendler()
     }
 
     runApp(){
@@ -18,17 +22,13 @@ class Application{
                 data += chank.toString()
             });
             req.on("end", () => {
-                if (req.method = 'POST') {
-                    const user = this.postHendler.getUserData(req, res, data)
-                    //this.users.push(user)
-                }
-                if (req.method = 'GET') {
-                    const user = this.getHendler.getUserData(req, res)
-                    //this.users.push(user)
-                }
-                if (req.method = 'DELETE') {
-                    const user = this.deleteHendler.getUserData(req, res)
-                    //this.users.push(user)
+                console.log(req.method)
+                switch (req.method){
+                    case 'POST': this.postHendler.getUserData(req, res, data); break;
+                    case 'GET': this.getHendler.getUserData(req, res); break;
+                    case 'DELETE': this.deleteHendler.getUserData(req, res); break;
+                    case 'PUT': const user = this.putHendler.getUserData(req, res, data); break;
+
                 }
             } )
 

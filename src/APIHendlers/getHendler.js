@@ -10,8 +10,9 @@ export class GETHendler{
     async getUserData(req, res){
         console.log('get..........')
         const urlParts = req.url?.split('/');
-        const userId = urlParts?.[3];
-        if (urlParts?.[2] === 'users') {
+        const userId = urlParts?.[2];
+        console.log(urlParts, req.url)
+        if (urlParts?.[1] === 'users') {
             console.log(userId)
             if (userId) {
                 // GET api/users/{userId}
@@ -25,8 +26,9 @@ export class GETHendler{
                 }
             } else {
                 // GET api/users
+            
+                const users = this.dBHendler.getAllUsers();
                 console.log('все юзеры', users)
-                const users = this.dBHendler.getAllUsers()
                 res.writeHead(200, { 'Content-Type': 'application/json' });
                 res.end(JSON.stringify(users));
             }

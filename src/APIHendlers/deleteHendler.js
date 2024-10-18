@@ -1,6 +1,6 @@
 import {DBHendler} from './../DBHendlers/dbHendler.js'
 
-export class GETHendler{
+export class DeleteHendler{
   //  users = [];
     constructor(){
        // this.PORT = process.env.PORT || 3000;
@@ -9,8 +9,8 @@ export class GETHendler{
 
     async getUserData(req, res){
         const urlParts = req.url?.split('/');
-        const userId = urlParts?.[3];
-        if (urlParts?.[2] === 'users' && userId) {
+        const userId = urlParts?.[2];
+        if (urlParts?.[1] === 'users' && userId) {
             const userIndex = this.dBHendler.findUserByID(userId) //users.findIndex(u => u.id === userId);
             if (userIndex === -1) {
                 res.writeHead(404, { 'Content-Type': 'application/json' });
