@@ -13,7 +13,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "files": ["src/index.ts"],
+  "files": ["src/index.js"],
   "include": ["src/<strong>/*"],
   "exclude": ["node_modules"]
 }

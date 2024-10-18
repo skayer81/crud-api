@@ -23,6 +23,11 @@ export class DBHendler{
         return this.users.find(user => user.id === userId);
       }
 
+      findUserByID = (userId) => {
+
+      return users.findIndex(u => u.id === userId)
+    }
+
       getAllUsers = () => {
         return this.users
       }
@@ -34,6 +39,11 @@ export class DBHendler{
             return false
         } 
         return true
+      }
+
+      delUserByID = (userId) => {
+        const index = this.findUserByID(userId)
+        if (index != -1) this.users.splice(index, 1);
       }
 
 

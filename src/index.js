@@ -26,6 +26,10 @@ class Application{
                     const user = this.getHendler.getUserData(req, res)
                     //this.users.push(user)
                 }
+                if (req.method = 'DELETE') {
+                    const user = this.deleteHendler.getUserData(req, res)
+                    //this.users.push(user)
+                }
             } )
 
           //  console.log(this.users)
