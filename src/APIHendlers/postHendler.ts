@@ -70,7 +70,8 @@ export class POSTHendler {
       return;
     }
     try {
-      const parsedData: unknown = JSON.parse(data);
+      //  const parsedData: unknown =
+      JSON.parse(data);
     } catch (error) {
       res.writeHead(400, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ message: `Error parsing JSON : ${data}` }));

@@ -55,9 +55,11 @@ export class Application {
     });
   }
 
-  getServer = () => this.server;
+  public getServer = (): Server | null => this.server;
 
-  closeServer = () => this.server?.close();
+  public closeServer = (): void => {
+    this.server?.close();
+  };
 }
 
 export const app = new Application();

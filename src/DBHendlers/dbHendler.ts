@@ -23,6 +23,7 @@ export class DBHendler {
 
   constructor() {
     if (DBHendler.instance) {
+      // eslint-disable-next-line no-constructor-return
       return DBHendler.instance;
     }
     DBHendler.instance = this;
@@ -62,18 +63,18 @@ export class DBHendler {
 
   public getAllUsers = (): User[] => this.users;
 
-  public chekValidUserUpdateData = (userData: User): boolean => {
-    const { username, age, hobbies } = userData;
-    // const
-    if (
-      (username && typeof username !== "string") ||
-      (age && Number.isNaN(age)) ||
-      !Array.isArray(hobbies)
-    ) {
-      return false;
-    }
-    return true;
-  };
+  // public chekValidUserUpdateData = (userData: User): boolean => {
+  //   const { username, age, hobbies } = userData;
+  //   // const
+  //   if (
+  //     (username && typeof username !== "string") ||
+  //     (age && Number.isNaN(age)) ||
+  //     !Array.isArray(hobbies)
+  //   ) {
+  //     return false;
+  //   }
+  //   return true;
+  // };
 
   public delUserByID = (userId: string): void => {
     const index = this.findUserByID(userId);
@@ -82,7 +83,7 @@ export class DBHendler {
     }
   };
 
-  public uppdateUser = (userIndex: number, userData: User): void => {
+  public uppdateUser = (userIndex: number, userData: User): User => {
     const { username, age, hobbies } = userData;
     const updatedUser = {
       ...this.users[userIndex],
@@ -92,6 +93,7 @@ export class DBHendler {
       hobbies: hobbies !== undefined ? hobbies : this.users[userIndex].hobbies,
     };
     this.users[userIndex] = updatedUser;
+    return updatedUser;
   };
 }
 
