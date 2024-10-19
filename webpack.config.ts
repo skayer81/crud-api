@@ -12,6 +12,12 @@ import ESLintPlugin from "eslint-webpack-plugin";
 //   plugins: [new ESLintPlugin({ extensions: ['ts'], fix: false })],
 // };
 
+
+
+
+
+
+
 import { resolve as _resolve, dirname } from "path";
 //import path, { dirname } from 'node:path';
 //import { fileURLToPath } from 'node:url';
@@ -26,9 +32,19 @@ const stylesHandler = "style-loader";
 const config = {
   mode: "development",
   entry: "./src/index.ts",
+  // output: {
+  //   path: _resolve(__dirname, "dist"),
+  // },
   output: {
-    path: _resolve(__dirname, "dist"),
+    filename: 'bundle.js', // Имя выходного файла
+  //  path: path.resolve(__dirname, 'dist'),
+  path: _resolve(__dirname, "dist"),
+    clean: true, // Очищает выходную папку перед каждой сборкой
+    libraryTarget: 'commonjs' , // Указывает на использование ES-модулей
   },
+  //  experiments: {
+  //    outputModule: true 
+  //  },
   plugins: [
     // Add your plugins here
     // Learn more about plugins from https://webpack.js.org/configuration/plugins/
