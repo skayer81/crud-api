@@ -5,12 +5,11 @@ export class PUTHendler {
   //  users = [];
   private dBHendler = new DBHendler();
 
-
   public getUserData(
     req: http.IncomingMessage,
     res: http.ServerResponse,
     data: string,
-  ) : void{
+  ): void {
     const urlParts = req.url?.split("/");
     const userId = urlParts?.[2];
     if (urlParts?.[1] === "users" && userId) {
@@ -42,7 +41,5 @@ export class PUTHendler {
       res.writeHead(400, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ message: "Invalid userId format" }));
     }
-
   }
 }
-

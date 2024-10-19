@@ -8,97 +8,85 @@ type User = {
   hobbies: string[];
 };
 
-
-function isUser (data: unknown): data is User {
-  if (typeof data !== 'object' || data === null) {
+function isUser(data: unknown): data is User {
+  if (typeof data !== "object" || data === null) {
     return false;
   }
 
   const obj = data as Record<string, unknown>;
 
   return (
-    typeof obj.username === 'string' &&
+    typeof obj.username === "string" &&
     !Number.isNaN(Number(obj.age)) && // === 'number'
-    Array.isArray(obj.hobbies)// &&
+    Array.isArray(obj.hobbies) // &&
   );
 }
 
-function requiredFieldnotEmpty (userData: User) : boolean  {
+function requiredFieldnotEmpty(userData: User): boolean {
   const { username, age, hobbies } = userData;
-  if (
-    !username ||
-    !age ||
-    !Array.isArray(hobbies)
-  ) {
+  if (!username || !age || !Array.isArray(hobbies)) {
     return false;
   }
   return true;
-};
+}
 
 function parseUserData(data: string, res: http.ServerResponse): User | null {
   try {
-  
     const parsedData: unknown = JSON.parse(data);
-    if (isUser (parsedData)) {
+    if (isUser(parsedData)) {
       return parsedData;
-    } 
-      console.error('Invalid User data:', parsedData);
-      return null;
-    
+    }
+    console.error("Invalid User data:", parsedData);
+    return null;
   } catch (error) {
-    res.writeHead(400 , { "Content-Type": "application/json" });
+    res.writeHead(400, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ message: `Error parsing JSON : ${data}` }));
-  //  console.error('Error parsing JSON:');
+    //  console.error('Error parsing JSON:');
     return null;
   }
 }
 
-
-// const parseData: User = JSON.parse(String(data)); 
+// const parseData: User = JSON.parse(String(data));
 
 export class POSTHendler {
   //  users = [];
   private dBHendler = new DBHendler(); // .getInstance
-  
- 
+
   public getUserData(
     req: http.IncomingMessage,
     res: http.ServerResponse,
     data: string,
-  ) : void{
+  ): void {
     console.log("post..........");
-    const urlParts = req.url?.split("/");// Проверить что нет "/" в конце
+    const urlParts = req.url?.split("/"); // Проверить что нет "/" в конце
     if (!(urlParts?.[1] === "users") || urlParts?.length > 2) {
       res.writeHead(404, { "Content-Type": "application/json" });
-     res.end(JSON.stringify({ message: "request to non-existing endpoint" }));
-      return
+      res.end(JSON.stringify({ message: "request to non-existing endpoint" }));
+      return;
     }
     if (!data) {
-      res.writeHead(400 , { "Content-Type": "application/json" });
+      res.writeHead(400, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ message: "body is empty" }));
-      return
+      return;
     }
     try {
-  
       const parsedData: unknown = JSON.parse(data);
-      } 
-
-     catch (error) {
-      res.writeHead(400 , { "Content-Type": "application/json" });
+    } catch (error) {
+      res.writeHead(400, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ message: `Error parsing JSON : ${data}` }));
-      return
+      return;
     }
     const parsedData: unknown = parseUserData(data, res);
     if (!isUser(parsedData)) {
-      res.writeHead(400 , { "Content-Type": "application/json" });
+      res.writeHead(400, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ message: `Invalid User data : ${data}` }));
-      return
+      return;
     }
     const chekUserRes = requiredFieldnotEmpty(parsedData);
 
     if (chekUserRes) {
       const newUser = this.dBHendler.addUser(parsedData);
-      res.writeHead(202, { "Content-Type": "application/json" });
+      res.writeHead(201, { "Content-Type": "application/json" });
       res.end(JSON.stringify(newUser));
     } else {
       res.writeHead(400, { "Content-Type": "application/json" });
@@ -106,8 +94,7 @@ export class POSTHendler {
         JSON.stringify({ message: "Required fields are missing or invalid" }),
       );
     }
-
-  }   
+  }
 }
 
 //     runApp(){

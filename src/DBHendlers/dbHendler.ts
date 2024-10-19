@@ -54,16 +54,15 @@ export class DBHendler {
     return user;
   };
 
-  public  getUserByID = (userId: string) : User|undefined=> 
+  public getUserByID = (userId: string): User | undefined =>
     this.users.find((user) => user.id === userId);
 
   public findUserByID = (userId: string): number =>
     this.users.findIndex((user) => user.id === userId);
 
-  public getAllUsers = () : User[] => this.users;
+  public getAllUsers = (): User[] => this.users;
 
-
-  public chekValidUserUpdateData = (userData: User) : boolean=> {
+  public chekValidUserUpdateData = (userData: User): boolean => {
     const { username, age, hobbies } = userData;
     // const
     if (
@@ -76,7 +75,7 @@ export class DBHendler {
     return true;
   };
 
-  public delUserByID = (userId: string) : void => {
+  public delUserByID = (userId: string): void => {
     const index = this.findUserByID(userId);
     if (index !== -1) {
       this.users.splice(index, 1);

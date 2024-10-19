@@ -4,9 +4,8 @@ import { GETHendler } from "./APIHendlers/getHendler";
 import { PUTHendler } from "./APIHendlers/putHendler";
 import { DeleteHendler } from "./APIHendlers/deleteHendler";
 
-class Application {
-
-    private    PORT: number;
+export class Application {
+  private PORT: number;
 
   private server: Server | null = null;
 
@@ -23,12 +22,12 @@ class Application {
     this.PORT = Number(process.env.PORT) || 3001;
   }
 
-  public runApp():void {
+  public runApp(): void {
     console.log("run");
     this.server = http.createServer((req, res) => {
       let data = "";
       req.on("data", (chank) => {
-        data += String(chank);// .toString();
+        data += String(chank); // .toString();
       });
       req.on("end", () => {
         console.log(req.method);
@@ -45,18 +44,21 @@ class Application {
           case "PUT":
             this.putHendler.getUserData(req, res, data);
             break;
-            default: {
-              console.log('ddd')
-            }
+          default: {
+            console.log("ddd");
+          }
         }
       });
-
     });
     this.server.listen(this.PORT, () => {
       console.log(`Server is running on http://localhost:${this.PORT}`);
     });
   }
+
+  getServer = () => this.server;
+
+  closeServer = () => this.server?.close();
 }
 
-const app = new Application();
+export const app = new Application();
 app.runApp();
