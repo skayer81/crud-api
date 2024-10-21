@@ -1,7 +1,6 @@
 import 'dotenv/config';
 import http, { Server } from "http";
 import { POSTHandler } from './APIHandlers/postHandler';
-//  import { POSTHandler } from "./APIHandlers/postHandler";
 import { GETHandler } from "./APIHandlers/getHandler";
 import { PUTHandler } from "./APIHandlers/putHandler";
 import { DeleteHandler } from "./APIHandlers/deleteHandler";
@@ -13,7 +12,6 @@ export class Application {
 
   private postHandler = new POSTHandler();
 
-  //        postHandler = new POSTHandler()
   private getHandler = new GETHandler();
 
   private deleteHandler = new DeleteHandler();
@@ -25,14 +23,13 @@ export class Application {
   }
 
   public runApp(): void {
-    console.log("run");
     this.server = http.createServer((req, res) => {
       let data = "";
       req.on("data", (chunk) => {
-        data += String(chunk); // .toString();
+        data += String(chunk); 
       });
       req.on("end", () => {
-        console.log(req.method);
+        try{
         switch (req.method) {
           case "POST":
             this.postHandler.getUserData(req, res, data);
@@ -47,9 +44,14 @@ export class Application {
             this.putHandler.getUserData(req, res, data);
             break;
           default: {
-            console.log("ddd");
+            console.log("цкщтп ьуещв")
           }
         }
+      }
+      catch{
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ message: `Errors on the server side` }));
+      }
       });
     });
     this.server.listen(this.PORT, () => {

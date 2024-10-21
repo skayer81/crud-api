@@ -32,13 +32,3 @@ export enum StatusCode {
   
   }
 
-
-//   export function userIDIsInvalid(res : http.ServerResponse ): void{
-//     res.writeHead(StatusCode.BadRequest, { "Content-Type": "application/json" });
-//     res.end(JSON.stringify({ message: "userId is invalid (not uuid)" }));
-//     return;
-//   }
-
-
-// res.writeHead(404, { "Content-Type": "application/json" });
-// res.end(JSON.stringify({ message: "request to non-existing endpoint" }));

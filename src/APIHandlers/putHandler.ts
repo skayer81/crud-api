@@ -15,7 +15,6 @@ function isUser (data: unknown): data is PartialUser{
   const isAgeValid = typeof obj.age === "number" && !Number.isNaN(obj.age);
   const isHobbiesValid = Array.isArray(obj.hobbies) && obj.hobbies.every(hobby => typeof hobby === "string");
 
-  // Возвращаем true, если хотя бы одно поле валидно 
   return isUsernameValid || isAgeValid || isHobbiesValid;
 }
 
@@ -25,7 +24,6 @@ function parseUserData(data: string, res: http.ServerResponse): PartialUser | nu
     if (isUser(parsedData)) {
       return parsedData;
     }
-    console.error("Invalid User data:", parsedData);
     return null;
   } catch (error) {
     res.writeHead(400, { "Content-Type": "application/json" });
@@ -35,7 +33,7 @@ function parseUserData(data: string, res: http.ServerResponse): PartialUser | nu
 }
 
 export class PUTHandler {
-  //  users = [];
+
   private dBHandler = new DBHandler();
 
   public getUserData(
@@ -51,7 +49,7 @@ export class PUTHandler {
       replies.nonUUID(res)
       return;
     }
-    const finduser = this.dBHandler.getUserByID(userID); // users.find(u => u.id === userId);
+    const finduser = this.dBHandler.getUserByID(userID); 
     if (!finduser) {
       res.writeHead(404, { "Content-Type": "application/json" });
       res.end(
@@ -78,7 +76,7 @@ export class PUTHandler {
       res.end(JSON.stringify({ message: `Invalid User data : ${data}` }));
       return;
     }
-    let user = this.dBHandler.getUserByID(userID); //  users.findIndex(u => u.id === userId);
+    let user = this.dBHandler.getUserByID(userID); 
     if (!user) {
       res.writeHead(404, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ message: "User not found" }));

@@ -10,7 +10,6 @@ export class GETHandler {
     req: http.IncomingMessage,
     res: http.ServerResponse,
   ): void {
-   // throw new Error(" ttt");
       if (check.endpointIsValid(req.url)) {
         const users = this.dBHandler.getAllUsers();
         res.writeHead(200, { "Content-Type": "application/json" });

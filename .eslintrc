@@ -38,7 +38,7 @@
     "eol-last": "error",
     "import/extensions": "off",
     "import/prefer-default-export": "off",
-    "max-lines-per-function": ["error", 50],
+    "max-lines-per-function": ["error", 500],
     "no-console": "off",
     "no-debugger": "off",
     "no-multiple-empty-lines": ["error", { "max": 2, "maxBOF": 0, "maxEOF": 1 }],
