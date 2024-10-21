@@ -1,17 +1,17 @@
 import http from "http";
-import { DBHendler } from "../DBHendlers/dbHendler";
+import { User } from "src/types";
+import { DBHandler } from "../DBHandlers/dbHandler"; 
+import * as check from "../utils/inspectorsAPI"
+import * as replies from '../utils/sendingReplies'
 
-type User = {
-  id?: string;
-  username: string;
-  age: number;
-  hobbies: string[];
-};
-function isUUIDv4(uuid: string): boolean {
-  const uuidv4Regex =
-    /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-  return uuidv4Regex.test(uuid);
-}
+
+// type User = {
+//   id?: string;
+//   username: string;
+//   age: number;
+//   hobbies: string[];
+// };
+
 function isUser(data: unknown): data is User {
   if (typeof data !== "object" || data === null) {
     return false;
@@ -25,6 +25,15 @@ function isUser(data: unknown): data is User {
     Array.isArray(obj.hobbies) // &&
   );
 }
+
+function requiredFieldnotEmpty(userData: User): boolean {
+  const { username, age, hobbies } = userData;
+  if (!username || !age || !Array.isArray(hobbies)) {
+    return false;
+  }
+  return true;
+}
+
 function parseUserData(data: string, res: http.ServerResponse): User | null {
   try {
     const parsedData: unknown = JSON.parse(data);
@@ -41,26 +50,26 @@ function parseUserData(data: string, res: http.ServerResponse): User | null {
   }
 }
 
-export class PUTHendler {
+// const parseData: User = JSON.parse(String(data));
+
+export class POSTHandler {
   //  users = [];
-  private dBHendler = new DBHendler();
+  private dBHandler = new DBHandler(); // .getInstance
 
   public getUserData(
     req: http.IncomingMessage,
     res: http.ServerResponse,
     data: string,
   ): void {
-    const urlParts = req.url?.split("/");
-    const userId = urlParts?.[2];
-    if (!(urlParts?.[1] === "users" && userId && urlParts?.length === 2)) {
-      res.writeHead(404, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ message: "request to non-existing endpoint" }));
-      return;
-    }
-    if (!isUUIDv4(userId)) {
-      res.writeHead(400, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ message: "userId is invalid (not uuid)" }));
-      return;
+    console.log("post..........");
+    // const urlParts = req.url?.split("/"); // Проверить что нет "/" в конце
+    // if (!(urlParts?.[1] === "users") || urlParts?.length > 2) {
+    //   res.writeHead(404, { "Content-Type": "application/json" });
+    //   res.end(JSON.stringify({ message: "request to non-existing endpoint" }));
+    //   return;
+    // }
+    if (!check.endpointIsValid(req.url)){
+      replies.nonExistingEndpoint(res);
     }
     if (!data) {
       res.writeHead(400, { "Content-Type": "application/json" });
@@ -68,7 +77,7 @@ export class PUTHendler {
       return;
     }
     try {
-      // const parsedData: unknown =
+      //  const parsedData: unknown =
       JSON.parse(data);
     } catch (error) {
       res.writeHead(400, { "Content-Type": "application/json" });
@@ -76,22 +85,23 @@ export class PUTHendler {
       return;
     }
     const parsedData: unknown = parseUserData(data, res);
-
     if (!isUser(parsedData)) {
       res.writeHead(400, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ message: `Invalid User data : ${data}` }));
       return;
     }
-    const userIndex = this.dBHendler.findUserByID(userId); //  users.findIndex(u => u.id === userId);
-    if (userIndex === -1) {
-      res.writeHead(404, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ message: "User not found" }));
-      return;
+    const chekUserRes = requiredFieldnotEmpty(parsedData);
+
+    if (chekUserRes) {
+      const newUser = this.dBHandler.addUser(parsedData);
+      res.writeHead(201, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(newUser));
+    } else {
+      res.writeHead(400, { "Content-Type": "application/json" });
+      res.end(
+        JSON.stringify({ message: "Required fields are missing or invalid" }),
+      );
     }
-    //   const parseData = JSON.parse(String(data));
-    // if (this.dBHendler.chekValidUserUpdateData(parseData)) {
-    const user = this.dBHendler.uppdateUser(userIndex, parsedData);
-    res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(JSON.stringify(user));
   }
 }
+

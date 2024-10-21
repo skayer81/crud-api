@@ -1,52 +1,20 @@
 import { v4 as uuidv4 } from "uuid";
+import { User, PartialUser } from "src/types";
 
-type User = {
-  id?: string;
-  username: string;
-  age: number;
-  hobbies: string[];
-};
+export class DBHandler {
 
-// type InnerUser = {
-//   name: string,
-//   age: number,
-//   hobbies: Array<string>
-// }
-
-export class DBHendler {
-  // users = [];
-
-  // _instance : DBHendler|null = null;
-  private static instance: DBHendler | null = null;
+  private static instance: DBHandler | null = null;
 
   private users: User[] = [];
 
   constructor() {
-    if (DBHendler.instance) {
+    if (DBHandler.instance) {
       // eslint-disable-next-line no-constructor-return
-      return DBHendler.instance;
+      return DBHandler.instance;
     }
-    DBHendler.instance = this;
+    DBHandler.instance = this;
 
-    // this.users = [];
-    console.log("---------------------------------------");
-  } // Замените `any` на более конкретный тип, если возможно.
-  //   private static
-  //   _instance: DBHendler | null = null;
-  // constructor() {
-  //   // Инициализация console.log('---------------------------------------');
-  //   if (DBHendler._instance === null) {
-  //     DBHendler._instance = new DBHendler();
-  //   }
-  //   return DBHendler._instance;
-  // }
-
-  // public static getInstance(): DBHendler {
-  //   if (DBHendler._instance === null) {
-  //     DBHendler._instance = new DBHendler();
-  //   }
-  //   return DBHendler._instance;
-  // }
+  } 
 
   public addUser = (user: User): User => {
     const addingUser = user;
@@ -83,7 +51,8 @@ export class DBHendler {
     }
   };
 
-  public uppdateUser = (userIndex: number, userData: User): User => {
+  public uppdateUser = (userID: string, userData: PartialUser): User => {
+    const userIndex = this.findUserByID(userID)
     const { username, age, hobbies } = userData;
     const updatedUser = {
       ...this.users[userIndex],

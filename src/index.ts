@@ -1,22 +1,24 @@
+import 'dotenv/config';
 import http, { Server } from "http";
-import { POSTHendler } from "./APIHendlers/postHendler";
-import { GETHendler } from "./APIHendlers/getHendler";
-import { PUTHendler } from "./APIHendlers/putHendler";
-import { DeleteHendler } from "./APIHendlers/deleteHendler";
+import { POSTHandler } from './APIHandlers/postHandler';
+//  import { POSTHandler } from "./APIHandlers/postHandler";
+import { GETHandler } from "./APIHandlers/getHandler";
+import { PUTHandler } from "./APIHandlers/putHandler";
+import { DeleteHandler } from "./APIHandlers/deleteHandler";
 
 export class Application {
   private PORT: number;
 
   private server: Server | null = null;
 
-  private postHendler = new POSTHendler();
+  private postHandler = new POSTHandler();
 
-  //        postHendler = new POSTHendler()
-  private getHendler = new GETHendler();
+  //        postHandler = new POSTHandler()
+  private getHandler = new GETHandler();
 
-  private deleteHendler = new DeleteHendler();
+  private deleteHandler = new DeleteHandler();
 
-  private putHendler = new PUTHendler();
+  private putHandler = new PUTHandler();
 
   constructor() {
     this.PORT = Number(process.env.PORT) || 3001;
@@ -26,23 +28,23 @@ export class Application {
     console.log("run");
     this.server = http.createServer((req, res) => {
       let data = "";
-      req.on("data", (chank) => {
-        data += String(chank); // .toString();
+      req.on("data", (chunk) => {
+        data += String(chunk); // .toString();
       });
       req.on("end", () => {
         console.log(req.method);
         switch (req.method) {
           case "POST":
-            this.postHendler.getUserData(req, res, data);
+            this.postHandler.getUserData(req, res, data);
             break;
           case "GET":
-            this.getHendler.getUserData(req, res);
+            this.getHandler.getUserData(req, res);
             break;
           case "DELETE":
-            this.deleteHendler.getUserData(req, res);
+            this.deleteHandler.getUserData(req, res);
             break;
           case "PUT":
-            this.putHendler.getUserData(req, res, data);
+            this.putHandler.getUserData(req, res, data);
             break;
           default: {
             console.log("ddd");
